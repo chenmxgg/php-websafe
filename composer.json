@@ -1,0 +1,36 @@
+{
+    "name": "chenm/websafe",
+    "type": "library",
+    "license": "MIT",
+    "description": "专为支持psr-4规范框架开发的web安全防御脚本，支持POST、GET、COOKIE、SESSION等方面的常见注入防御，后续会完善更多外部数据层面的漏洞防护和相关功能",
+    "require": {
+        "php": ">=7.1",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Chenm\\Helper\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Chenm\\Helper\\": "tests/"
+        },
+        "files": [
+            "tests/functions.php"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {},
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.org"
+        }
+    }
+}
