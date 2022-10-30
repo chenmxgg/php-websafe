@@ -1,8 +1,8 @@
-# Chenm - helper php 开发助手
+# chenm-websafe php web防御脚本
 
 ## 介绍
 
-Chenm - helper 是为广大 phper 解决多个繁琐且常用的操作封装，如文件类、日志类、邮件类、短信类等无需自行封装直接使用
+chenm-websafe 专为支持psr-4规范框架开发的web安全防御脚本，支持POST、GET、COOKIE、SESSION、XSS等方面的常见注入防御，后续会完善更多外部数据层面的漏洞防护和相关功能
 
 > 部分来源于网络收集封装
 
@@ -12,34 +12,103 @@ QQ：857285711
 
 微信群：暂无
 
+## 特点
+无第三方依赖，安装即能用
+拦截日志自动记录并自动清理
+代码简单易懂，完美支持自定义修改
+
 
 ## 安装使用
-
-目前功能还未完善，后续将完善其他功能类
 
 ```bash
 #安装命令如下 注意，需要在服务器命令行的项目下执行
 cd "自己的项目路径"
-composer require chenm/helper
+composer require chenm/websafe
 ```
-Log类支持自动清理过期日志，更节省性能的单例操作并支持链式方法，方便多个容器储存分开使用
+## 自定义配置
+
+在src/Main/Config配置文件中，你可以自定义修改配置，包括防御规则、开关、提示模板、白名单等
 ```php
-#使用例子 
-use Chenm\Helper\Log;
-Log::getInstance()->setSaveDir(__DIR__)->write(Log::ERROR, '测试日志内容');
-Log::getInstance()->setLogWrite(false)->write(Log::ERROR, '测试日志内容')->getLog();
-Log::getInstance()->setLogWrite(true)->user('测试日志内容')->getLog();
-#配置自定义参数
-Log::getInstance()->addRecord($msg, $context, [
-    //日志目录
-    'dir' => '储存文件夹路径(不含文件名)',
-    //日志容器名称
-    'name' => 'Default',
-    //日志文件名称
-    'filename' => 'log.txt',
-    //日志单天记录级别 h 时 m 分
-    'log_level' => 'h',
-    //日志文件过期时间 单位天
-    'expire' => 7,
-], Log::INFO);
+
+namespace Chenm\websafe\Main;
+
+/**
+ * web 配置文件
+ */
+class Config
+{
+    /**
+     * 基础数据检测配置
+     *
+     * @var array
+     */
+    protected $config = [
+        'GET'     => [
+            //开关
+            'open'  => true,
+            //日志级别
+            'level' => 3,
+        ],
+        'POST'    => [
+            'open'  => true,
+            'level' => 3,
+        ],
+        'COOKIE'  => [
+            'open'  => true,
+            'level' => 2,
+        ],
+        'SESSION' => [
+            'open'  => true,
+            'level' => 2,
+        ],
+        'SERVER'  => [
+            'open'  => true,
+            'level' => 1,
+        ],
+
+    ];
+
+    /**
+     * 扩展检测配置
+     *
+     * @var array
+     */
+    protected $config_extends = [
+        'XSS' => [
+            'open'  => true,
+            'level' => 1,
+        ],
+
+    ];
+
+    /**
+     * url白名单正则模式 通过匹配 $_SERVER['REQUEST_URI'] 来验证
+     * 此处默认的白名单以TP6框架后台路径为例 可自行修改
+     * @var array
+     */
+    protected $white = [
+        'GET'     => [
+            //
+            '^\/[a-zA-Z0-9\-]+\.php\/(.*?)$',
+        ],
+        'POST'    => [
+            '^\/[a-zA-Z0-9\-]+\.php\/(.*?)$',
+        ],
+        'COOKIE'  => [
+            '^\/[a-zA-Z0-9\-]+\.php\/(.*?)$',
+        ],
+        'SESSION' => [
+            '^\/[a-zA-Z0-9\-]+\.php\/(.*?)$',
+        ],
+        'SERVER'  => [
+            '^\/[a-zA-Z0-9\-]+\.php\/(.*?)$',
+        ],
+    ];
+
+    /**
+     * 安全拦截提示模板  
+     * 模板保存在在src/Tpl下
+     * @var string
+     */
+    protected $tpl = 'DefaultTpl';
 ```
