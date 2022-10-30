@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Chenm\\Helper\\": "src/"
+            "Chenm\\websafe\\": "src/"
         },
         "files": [
             "src/functions.php"
@@ -17,7 +17,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Chenm\\Helper\\": "tests/"
+            "Chenm\\websafe\\": "tests/"
         },
         "files": [
             "tests/functions.php"
